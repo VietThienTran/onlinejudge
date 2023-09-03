@@ -1,0 +1,21 @@
+{
+    "name": "iisns/yii2-webuploader",
+    "description": "WebUploader is a simple modern file upload component based on Html5 and supplemented by Flash. It can give full play to the advantages of html5 in modern browsers, while not abandoning the mainstream IE browser and continuing to use the original Flash runtime. The two sets of runtimes have the same calling method, which can be chosen by the user at will. WebUploader uses large file fragments to upload concurrently, which greatly improves the efficiency of file upload.",
+    "keywords": ["yii2","upload","webuploader","iisns"],
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shiyang",
+            "email": "dr@shiyang.me"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "iisns\\webuploader\\": ""
+        }
+    }
+}

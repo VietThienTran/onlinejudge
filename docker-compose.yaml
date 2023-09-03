@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8888:80
+    depends_on:
+      - mysql
+    environment: 
+      PMA_USER: root
+      PMA_PASSWORD: 123456
+    links:
+      - mysql:db
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: onlinejudge
+      MYSQL_ROOT_PASSWORD: 123456
+      TZ: Asia/Ho_Chi_Minh
+  
+  judge:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: always
+    command: bash -c "make && ./dispatcher -d"
+    privileged: true
+    volumes:
+      - ./judge:/sandbox
+    links:
+      - mysql:mysql
+
+  polygon:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: bash -c "make && ./polygon -d"
+    restart: always
+    privileged: true
+    volumes:
+      - ./polygon:/sandbox
+    links:
+      - mysql:mysql
+
+  php:
+    image: yiisoftware/yii2-php:8.1-fpm
+    volumes:
+      - ./:/app:delegated
+
+  web:
+    image: phundament/nginx-one:1.9-5.1.1
+    environment:
+      - FASTCGI_PASS_HOST=php
+    ports:
+      - '8100:80'
+    volumes:
+      - ./:/app:delegated
